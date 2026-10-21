@@ -1,13 +1,48 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  AGENT
+  ADMIN
+}
+
+enum InquiryStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+}
+
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  passwordHash     String
+  name             String
+  role             Role      @default(AGENT)
+  createdInquiries Inquiry[] @relation("CreatedBy")
+  assignedInquiries Inquiry[] @relation("AssignedTo")
+  createdAt        DateTime  @default(now())
+}
+
+model Inquiry {
+  id           String        @id @default(uuid())
+  customerName String
+  contactInfo  String
+  subject      String
+  description  String
+  status       InquiryStatus @default(NEW)
+  
+  createdById  String
+  createdBy    User          @relation("CreatedBy", fields: [createdById], references: [id])
+  
+  assignedToId String?
+  assignedTo   User?         @relation("AssignedTo", fields: [assignedToId], references: [id])
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }

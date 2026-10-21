@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
@@ -17,7 +17,7 @@ interface Inquiry {
     createdBy: { name: string; email: string };
 }
 
-export default function InquiryDetailPage() {
+function InquiryDetailContent() {
     const { id } = useParams();
     const router = useRouter();
 

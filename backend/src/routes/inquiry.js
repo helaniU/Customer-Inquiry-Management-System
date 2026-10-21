@@ -101,10 +101,13 @@ router.get('/:id', authenticateToken, async (req, res) => {
 
 // 4. PATCH /api/inquiries/:id/status - Status Transition Logic
 router.patch('/:id/status', authenticateToken, async (req, res) => {
-    const { status } = req.body;
-
-    if (!status) {
-        return res.status(400).json({ error: 'BAD_REQUEST', message: 'Status is required' });
+    const { status } = req.body || {};
+    const VALID_STATUSES = ['NEW', 'IN_PROGRESS', 'RESOLVED'];
+    if (!status || !VALID_STATUSES.includes(status)) {
+        return res.status(400).json({
+            error: 'INVALID_STATUS',
+            message: `Invalid status '${status}'. Must be one of: ${VALID_STATUSES.join(', ')}`
+        });
     }
 
     try {

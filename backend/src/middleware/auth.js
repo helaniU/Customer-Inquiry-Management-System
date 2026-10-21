@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const prisma = require('../lib/prisma');
 
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -8,13 +9,24 @@ function authenticateToken(req, res, next) {
         return res.status(401).json({ error: 'UNAUTHORIZED', message: 'Authentication required' });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            return res.status(403).json({ error: 'FORBIDDEN', message: 'Token is invalid or expired' });
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Ensure user actually exists in current database
+        const user = await prisma.user.findUnique({
+            where: { id: decoded.id },
+            select: { id: true, email: true, name: true, role: true }
+        });
+
+        if (!user) {
+            return res.status(401).json({ error: 'UNAUTHORIZED', message: 'User session invalid. Please log in again.' });
         }
+
         req.user = user;
         next();
-    });
+    } catch (err) {
+        return res.status(403).json({ error: 'FORBIDDEN', message: 'Token is invalid or expired' });
+    }
 }
 
 function requireRole(roles) {

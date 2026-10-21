@@ -39,6 +39,9 @@ router.post('/', authenticateToken, async (req, res) => {
         });
         return res.status(201).json(inquiry);
     } catch (err) {
+        if (err.code === 'P2003') {
+            return res.status(400).json({ error: 'INVALID_REFERENCE', message: 'Referenced user or record does not exist in the database' });
+        }
         console.error(err);
         return res.status(500).json({ error: 'INTERNAL_ERROR', message: 'Failed to create inquiry' });
     }

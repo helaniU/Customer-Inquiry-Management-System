@@ -1,7 +1,7 @@
 const express = require('express');
 const { z } = require('zod');
 const prisma = require('../lib/prisma');
-const { authenticateToken } = require('../middleware/auth');
+const { authenticateToken, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -99,8 +99,8 @@ router.get('/:id', authenticateToken, async (req, res) => {
     }
 });
 
-// 4. PATCH /api/inquiries/:id/status - Status Transition Logic
-router.patch('/:id/status', authenticateToken, async (req, res) => {
+// 4. PATCH /api/inquiries/:id/status - Status Transition Logic (ADMIN only)
+router.patch('/:id/status', authenticateToken, requireRole(['ADMIN']), async (req, res) => {
     const { status } = req.body || {};
     const VALID_STATUSES = ['NEW', 'IN_PROGRESS', 'RESOLVED'];
     if (!status || !VALID_STATUSES.includes(status)) {

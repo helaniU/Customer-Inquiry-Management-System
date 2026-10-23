@@ -26,7 +26,7 @@ export default function NewInquiryPage() {
                 subject,
                 description,
             });
-            router.push('/dashboard');
+            router.push('/inquiries');
         } catch (err: any) {
             if (err.response?.data?.details) {
                 setErrors(err.response.data.details);
@@ -41,8 +41,8 @@ export default function NewInquiryPage() {
     return (
         <div className="min-h-screen bg-gray-50 font-sans py-8">
             <div className="mx-auto max-w-2xl px-4">
-                <Link href="/dashboard" className="mb-4 inline-block text-sm text-gray-600 hover:underline">
-                    &larr; Back to Dashboard
+                <Link href="/inquiries" className="mb-4 inline-block text-sm text-gray-600 hover:underline">
+                    &larr; Back to Inquiries
                 </Link>
 
                 <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
@@ -110,7 +110,7 @@ export default function NewInquiryPage() {
 
                         <div className="pt-4 flex justify-end gap-3">
                             <Link
-                                href="/dashboard"
+                                href="/inquiries"
                                 className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                             >
                                 Cancel

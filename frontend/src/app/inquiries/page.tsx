@@ -182,7 +182,7 @@ export default function InquiriesPage() {
           <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 flex items-center justify-center flex-shrink-0">
             <Coffee className="w-4 h-4" />
           </div>
-          <span className="font-bold text-sm tracking-tight">Coffee Ninja</span>
+          <span className="font-bold text-sm tracking-tight">QueryDesk</span>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1">
           <Link

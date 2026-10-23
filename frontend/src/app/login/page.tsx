@@ -24,7 +24,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await api.post('/auth/login', { email, password });
-      
+
       const { token, user } = response.data;
       if (typeof window !== 'undefined') {
         localStorage.setItem('token', token);
@@ -49,13 +49,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-950 via-zinc-900 to-black p-4">
       <div className="w-full max-w-md bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-2xl shadow-2xl p-8 space-y-6">
-        
+
         {/* Brand Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 shadow-inner">
             <Coffee className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Coffee Ninja</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-white">QueryDesk</h1>
           <p className="text-sm text-zinc-400">Customer Inquiry Management System</p>
         </div>
 

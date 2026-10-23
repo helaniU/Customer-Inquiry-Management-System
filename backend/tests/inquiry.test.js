@@ -3,12 +3,12 @@ const app = require('../src/app');
 const jwt = require('jsonwebtoken');
 
 describe('Backend Inquiry Security & Validation Rules', () => {
-    let validToken;
+    let adminToken;
 
     beforeAll(() => {
-        // Generate a test JWT token
-        validToken = jwt.sign(
-            { id: 'test-user-id', email: 'agent1@coffeeninja.com', role: 'AGENT', name: 'Agent One' },
+        // Generate an ADMIN JWT token so it passes the RBAC authorization middleware
+        adminToken = jwt.sign(
+            { id: 'admin-user-id', email: 'admin@coffeeninja.com', role: 'ADMIN', name: 'Admin User' },
             process.env.JWT_SECRET || 'super-secret-key-change-this-in-production',
             { expiresIn: '1h' }
         );
@@ -27,10 +27,9 @@ describe('Backend Inquiry Security & Validation Rules', () => {
     });
 
     test('PATCH /api/inquiries/:id/status - Should reject invalid status transition with 400', async () => {
-        // Mocking an attempt to update an inquiry with an unallowed status payload
         const res = await request(app)
             .patch('/api/inquiries/non-existent-id/status')
-            .set('Authorization', `Bearer ${validToken}`)
+            .set('Authorization', `Bearer ${adminToken}`)
             .send({ status: 'INVALID_STATUS' });
 
         expect(res.statusCode).toBe(400);

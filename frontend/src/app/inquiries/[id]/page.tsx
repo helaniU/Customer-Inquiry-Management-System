@@ -34,7 +34,7 @@ function InquiryDetailContent() {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            try { setCurrentUser(JSON.parse(storedUser)); } catch {}
+            try { setCurrentUser(JSON.parse(storedUser)); } catch { }
         }
     }, []);
 

@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -7,7 +8,17 @@ const inquiryRoutes = require('./routes/inquiry');
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+    'https://frontend-production-7b812b1f.up.railway.app'
+];
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
 app.use(express.json());
 
 // Routes
@@ -16,14 +27,17 @@ app.use('/api/inquiries', inquiryRoutes);
 
 // Global Error Handler
 app.use((req, res) => {
-    res.status(404).json({ error: 'NOT_FOUND', message: 'Endpoint not found' });
+    res.status(404).json({
+        error: 'NOT_FOUND',
+        message: 'Endpoint not found'
+    });
 });
 
 const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-        console.log(`Backend server running on http://localhost:${PORT}`);
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Backend server running on port ${PORT}`);
     });
 }
 
